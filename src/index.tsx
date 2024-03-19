@@ -15,6 +15,7 @@ import { Button } from "./components/Button";
 import { ResetIcon } from "./icons/ResetIcon";
 import "react-advanced-cropper/dist/style.css";
 import "./styles.scss";
+import { downloadURL } from "./util";
 
 const defaultSettings = {
   brightness: 0,
@@ -23,13 +24,17 @@ const defaultSettings = {
   contrast: 0
 };
 
-export type Mode = 'crop' | keyof(typeof defaultSettings)
+export type Mode = 'crop' | keyof (typeof defaultSettings)
 
 export const ImageEditor = () => {
+  const size = {
+    width: 1400,
+    height: 560,
+  }
   const cropperRef = useRef<FixedCropperRef>(null);
   const previewRef = useRef<CropperPreviewRef>(null);
 
-  const [src, setSrc] = useState(require("./photo.jpeg"));
+  const [src, setSrc] = useState("https://images.unsplash.com/photo-1516974409143-b067ec3e0ec8");
 
   const [mode, setMode] = useState<Mode>("crop");
 
@@ -62,12 +67,11 @@ export const ImageEditor = () => {
 
   const onDownload = () => {
     if (cropperRef.current) {
-      const newTab = window.open();
-      if (newTab) {
-        newTab.document.body.innerHTML = `<img src="${cropperRef.current
-          .getCanvas()
-          ?.toDataURL()}"/>`;
-      }
+      const url = cropperRef.current
+        .getCanvas(size)
+        ?.toDataURL()
+      // download it as a file.
+      if (url) downloadURL(url, "image.png");
     }
   };
 
@@ -95,10 +99,7 @@ export const ImageEditor = () => {
               !cropperEnabled && "image-editor__cropper-overlay--faded"
             )
           }}
-          stencilSize={{
-            width: 1400,
-            height: 560,
-          }}
+          stencilSize={size}
           backgroundWrapperProps={{
             scaleImage: cropperEnabled,
             moveImage: cropperEnabled
