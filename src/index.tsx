@@ -2,10 +2,10 @@ import ReactDOM from "react-dom";
 import React, { useState, useRef } from "react";
 import cn from "classnames";
 import {
-  Cropper,
-  CropperRef,
+  FixedCropper,
   CropperPreview,
-  CropperPreviewRef
+  CropperPreviewRef,
+  FixedCropperRef
 } from "react-advanced-cropper";
 import { AdjustablePreviewBackground } from "./components/AdjustablePreviewBackground";
 import { Navigation } from "./components/Navigation";
@@ -16,20 +16,24 @@ import { ResetIcon } from "./icons/ResetIcon";
 import "react-advanced-cropper/dist/style.css";
 import "./styles.scss";
 
+const defaultSettings = {
+  brightness: 0,
+  hue: 0,
+  saturation: 0,
+  contrast: 0
+};
+
+export type Mode = 'crop' | keyof(typeof defaultSettings)
+
 export const ImageEditor = () => {
-  const cropperRef = useRef<CropperRef>(null);
+  const cropperRef = useRef<FixedCropperRef>(null);
   const previewRef = useRef<CropperPreviewRef>(null);
 
   const [src, setSrc] = useState(require("./photo.jpeg"));
 
-  const [mode, setMode] = useState("crop");
+  const [mode, setMode] = useState<Mode>("crop");
 
-  const [adjustments, setAdjustments] = useState({
-    brightness: 0,
-    hue: 0,
-    saturation: 0,
-    contrast: 0
-  });
+  const [adjustments, setAdjustments] = useState(defaultSettings);
 
   const onChangeValue = (value: number) => {
     if (mode in adjustments) {
@@ -78,7 +82,7 @@ export const ImageEditor = () => {
   return (
     <div className={"image-editor"}>
       <div className="image-editor__cropper">
-        <Cropper
+        <FixedCropper
           src={src}
           ref={cropperRef}
           stencilProps={{
@@ -90,6 +94,10 @@ export const ImageEditor = () => {
               "image-editor__cropper-overlay",
               !cropperEnabled && "image-editor__cropper-overlay--faded"
             )
+          }}
+          stencilSize={{
+            width: 1400,
+            height: 560,
           }}
           backgroundWrapperProps={{
             scaleImage: cropperEnabled,

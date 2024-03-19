@@ -9,11 +9,12 @@ import { UploadIcon } from "../icons/UploadIcon";
 import { DownloadIcon } from "../icons/DownloadIcon";
 import { Button } from "./Button";
 import "./Navigation.scss";
+import { Mode } from "..";
 
 interface Props {
   className?: string;
   mode?: string;
-  onChange?: (mode: string) => void;
+  onChange?: (mode: Mode) => void;
   onDownload?: () => void;
   onUpload?: (blob: string) => void;
 }
@@ -25,7 +26,7 @@ export const Navigation: FC<Props> = ({
   onDownload,
   mode
 }) => {
-  const setMode = (mode: string) => () => {
+  const setMode = (mode: Mode) => () => {
     onChange?.(mode);
   };
 
