@@ -1,6 +1,8 @@
+@import "../styles.scss";
+
 .image-editor-navigation {
 	background: #1b1a21;
-	height: 84px;
+	height: $nav-height;
 	border-top: solid 1px #2b2a30;
 	display: flex;
 	align-items: center;

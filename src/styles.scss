@@ -1,4 +1,5 @@
 $theme-color: #61DAFB;
+$nav-height: 84px;
 
 body {
 	margin: 0;
@@ -20,7 +21,7 @@ body {
 	}
 	&__cropper {
 		background: #0f0e13;
-		height: 400px;
+		height: calc(100vh - $nav-height);
 		max-height: 100%;
 		position: relative;
 	}
